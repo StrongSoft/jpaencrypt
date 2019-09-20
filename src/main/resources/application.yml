@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    driverClassName: org.mariadb.jdbc.Driver
+    url: jdbc:mysql://localhost/test?characterEncoding=utf-8&useSSL=false
+    username: root
+    password: test1234
+  jpa:
+    hibernate:
+      ddl-auto: update
+  mobile:
+    devicedelegatingviewresolver:
+      enabled: true
+      normal-prefix: /pc
+      tablet-prefix: /mobile
+      mobile-prefix: /mobile
+medialog:
+  secretkey: test@key
