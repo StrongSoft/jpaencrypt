@@ -28,7 +28,7 @@ public class UserControllerTest {
     @Value("${medialog.secretkey}")
     private String key;
 
-    @Test
+    //@Test
     public void setUser() {
         //given
         UserRequestDto user = new UserRequestDto();
@@ -46,5 +46,28 @@ public class UserControllerTest {
             e.printStackTrace();
         }
 
+    }
+
+    @Test
+    public void getUser(){
+
+        //setUser();
+//given
+        UserRequestDto user = new UserRequestDto();
+        user.setName("regur");
+        user.setHpNo("01023182681");
+
+
+
+        //when
+        ResponseEntity<UserResponseDto> userResponseDto = restTemplate.postForEntity("http://localhost:8080/userInfo", user, UserResponseDto.class);
+
+        //then
+        try {
+            System.out.println(userResponseDto.getBody().getName());
+            System.out.println(userResponseDto.getBody().getHpNo());
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

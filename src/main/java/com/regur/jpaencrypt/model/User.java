@@ -1,62 +1,47 @@
 package com.regur.jpaencrypt.model;
 
-import com.regur.jpaencrypt.utils.CryptoUtil;
+import lombok.ToString;
+import org.hibernate.annotations.ColumnTransformer;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 /**
  * @author leeseungmin on 2019-09-17
  */
 @Entity
+@ToString
 public class User {
     @Id
     @GeneratedValue
     private Long id;
 
-    @Column(name = "name")
-    private String encryptedName;
-//    @Column(name="name")
-//    @Length(max=500)
-/*    @ColumnTransformer(
-            read =  "AES_DECRYPT(UNHEX(name), 'mykey')",
-            write = "HEX(AES_ENCRYPT(?, 'mykey'))"
-    )*/
-    @Transient
+    @ColumnTransformer(
+            read =  "cast(AES_DECRYPT(UNHEX(name), '${encryption.key}') as char(255))",
+            write = "HEX(AES_ENCRYPT(?, '${encryption.key}'))"
+    )
     private String name;
 
-    @Column(name = "hp_no")
-    private String encryptedHpNo;
-
-//    @Column(name="hpNo")
-//    @Length(max=500)
-/*    @ColumnTransformer(
-            read =  "AES_DECRYPT(UNHEX(hpNo), 'mykey')",
-            write = "HEX(AES_ENCRYPT(?, 'mykey'))"
-    )*/
-    @Transient
+    @ColumnTransformer(
+            read =  "cast(AES_DECRYPT(UNHEX(hp_no), '${encryption.key}') as char(255))",
+            write = "HEX(AES_ENCRYPT(?, '${encryption.key}'))"
+    )
     private String hpNo;
 
     public String getName() {
-        if(name == null){
-            name = CryptoUtil.decryptAES256(encryptedName);
-        }
         return name;
     }
 
     public void setName(String name) {
-        this.encryptedName = CryptoUtil.encryptAES256(name);
         this.name = name;
     }
 
     public String getHpNo() {
-        if(hpNo == null){
-            hpNo = CryptoUtil.decryptAES256(encryptedHpNo);
-        }
         return hpNo;
     }
 
     public void setHpNo(String hpNo) {
-        this.encryptedHpNo = CryptoUtil.encryptAES256(hpNo);
         this.hpNo = hpNo;
     }
 }
