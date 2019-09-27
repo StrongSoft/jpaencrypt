@@ -14,5 +14,5 @@ spring:
       normal-prefix: /pc
       tablet-prefix: /mobile
       mobile-prefix: /mobile
-medialog:
+app:
   secretkey: test@key
