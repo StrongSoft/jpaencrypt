@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 /**
@@ -19,7 +20,7 @@ public class UserCustomRepositoryImpl implements UserCustomRepository {
     @Value("${app.secretkey}")
     private String secretkey;
 
-    @Autowired
+    @PersistenceContext
     EntityManager entityManager;
 
     @Transactional
@@ -34,11 +35,18 @@ public class UserCustomRepositoryImpl implements UserCustomRepository {
         return user;
     }
     @Override
-    public List<User> findByHpNo(String hpNo) {
+    /*public List<User> findByHpNo(String hpNo) {
         return entityManager.createNativeQuery("select id, cast(AES_DECRYPT(UNHEX(hp_no), '"+secretkey+"') as char(255)) as hp_no, "+
                             "cast(AES_DECRYPT(UNHEX(name), '"+secretkey+"') as char(255)) as name from user " +
                             "where cast(AES_DECRYPT(UNHEX(hp_no), '"+secretkey+"') as char(255)) = ?", User.class)
                             .setParameter(1, hpNo)
                             .getResultList();
+    }*/
+    public List<User> findByHpNo(String hpNo) {
+        return entityManager.createNativeQuery("select id, cast(AES_DECRYPT(UNHEX(hp_no), '"+secretkey+"') as char(255)) as hp_no, "+
+                "cast(AES_DECRYPT(UNHEX(name), '"+secretkey+"') as char(255)) as name from user " +
+                "where cast(AES_DECRYPT(UNHEX(hp_no), '"+secretkey+"') as char(255)) = ?", User.class)
+                .setParameter(1, hpNo)
+                .getResultList();
     }
 }

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class GlobalValue {
     public static String SECRET_KEY;
 
-    @Value("${medialog.secretkey}")
+    @Value("${app.secretkey}")
     public void setSecretKey(String key) {
         GlobalValue.SECRET_KEY = key;
     }

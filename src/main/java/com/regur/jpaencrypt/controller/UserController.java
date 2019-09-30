@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @Slf4j
 public class UserController {
@@ -40,8 +43,13 @@ public class UserController {
     }
 
     @PostMapping("/userInfo")
-    public UserResponseDto getUserList(@RequestBody UserRequestDto userRequestDto){
-        UserResponseDto userResponseDto = (UserResponseDto) userService.findByHpNo(userRequestDto.getHpNo());
-        return userResponseDto;
+    public List<UserResponseDto> getUserList(@RequestBody UserRequestDto userRequestDto){
+        List<UserResponseDto> userResponseDtoList = new ArrayList<>();
+        List<User> userList = userService.findByHpNo(userRequestDto.getHpNo());
+        for (User user: userList) {
+            UserResponseDto userResponseDto = modelMapper.map(user, UserResponseDto.class);
+            userResponseDtoList.add(userResponseDto);
+        }
+        return userResponseDtoList;
     }
 }
